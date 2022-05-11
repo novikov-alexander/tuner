@@ -1,3 +1,5 @@
+import {getStandardFrequency, noteStrings} from "./tunerCommon";
+
 const Notes = function(selector, tuner) {
   this.tuner = tuner
   this.isAutoMode = true
@@ -16,10 +18,10 @@ Notes.prototype.createNotes = function() {
     for (var n = 0; n < 12; n += 1) {
       const $note = document.createElement('div')
       $note.className = 'note'
-      $note.dataset.name = this.tuner.noteStrings[n]
+      $note.dataset.name = noteStrings[n]
       $note.dataset.value = 12 * (octave + 1) + n
       $note.dataset.octave = octave.toString()
-      $note.dataset.frequency = this.tuner.getStandardFrequency(
+      $note.dataset.frequency = getStandardFrequency(
         $note.dataset.value
       )
       $note.innerHTML =
@@ -84,3 +86,5 @@ Notes.prototype.toggleAutoMode = function() {
   }
   this.isAutoMode = !this.isAutoMode
 }
+
+export default Notes;

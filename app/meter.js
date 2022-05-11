@@ -26,3 +26,5 @@ Meter.prototype.init = function() {
 Meter.prototype.update = function(deg) {
   this.$pointer.style.transform = 'rotate(' + deg + 'deg)'
 }
+
+export default Meter;

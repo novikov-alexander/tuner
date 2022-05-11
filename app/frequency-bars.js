@@ -28,3 +28,5 @@ FrequencyBars.prototype.update = function(data) {
     )
   }
 }
+
+export default FrequencyBars;

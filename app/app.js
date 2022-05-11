@@ -1,3 +1,8 @@
+import FrequencyBars from './frequency-bars';
+import Meter from './meter';
+import Notes from './notes';
+import Tuner from './tuner';
+
 const Application = function() {
   this.initA4()
   this.tuner = new Tuner(this.a4)
