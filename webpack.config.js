@@ -9,18 +9,6 @@ const isProduction = process.env.NODE_ENV == "production";
 const stylesHandler = "style-loader";
 
 const config = {
-  entry: {
-    bundle: "./app/app.js"
-  },
-  output: {
-    filename: "[name].js",
-    path: path.resolve(__dirname, "dist"),
-    publicPath: '/',
-  },
-  devServer: {
-    open: true,
-    host: "localhost",
-  },
   devtool: "inline-source-map",
   plugins: [
     new HtmlWebpackPlugin({
@@ -43,15 +31,7 @@ const config = {
       {
         test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
         type: "asset",
-      },
-      {
-        test: /\.js$/,
-        parser: {
-          // For other use the same 
-          worker: ["*.audioWorklet.addModule()", "..."]
-        }
       }
-
       // Add your rules for custom modules here
       // Learn more about loaders from https://webpack.js.org/loaders/
     ],
@@ -68,11 +48,42 @@ const config = {
   },
 };
 
-module.exports = () => {
-  if (isProduction) {
-    config.mode = "production";
-  } else {
-    config.mode = "development";
+if (isProduction) {
+  config.mode = "production";
+} else {
+  config.mode = "development";
+}
+
+const appConfig = {
+  ...config,
+  entry: {
+    bundle: "./app/app.js"
+  },
+  output: {
+    filename: "[name].js",
+    path: path.resolve(__dirname, "dist"),
+    publicPath: '/',
+  },
+  dependencies: ["frequency-processor"],
+  devServer: {
+    open: true,
+    host: "localhost",
+  },
+}
+
+const processorConfig = {
+  ...config,
+  name: "frequency-processor",
+  entry: "./app/frequency-processor.ts",
+  target: "webworker",
+  output: { 
+    filename: "frequency-processor.js",
+    path: path.resolve(__dirname, "dist"),
+    publicPath: '/'
   }
-  return config;
-};
+}
+
+module.exports = [
+  processorConfig,
+  appConfig
+]

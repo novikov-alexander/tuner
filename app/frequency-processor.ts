@@ -1,5 +1,5 @@
-import aubio from "aubiojs";
-import {noteStrings, getStandardFrequency, semitone} from "./tunerCommon";
+//import aubio from "aubiojs";
+//import {noteStrings, getStandardFrequency, semitone} from "./tunerCommon";
 
 interface Note {
     name: string;
@@ -23,7 +23,7 @@ class FrequencyProcessor extends AudioWorkletProcessor {
       // The super constructor call is required.
       super();
 
-      var self = this;
+      //var self = this;
       let bufferSize = 4096;
       let sampleRate = 44100;
 
@@ -83,4 +83,4 @@ class FrequencyProcessor extends AudioWorkletProcessor {
   
   registerProcessor('frequency-processor', FrequencyProcessor);
 
-  aubio();
+  //aubio();

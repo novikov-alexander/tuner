@@ -78,9 +78,7 @@ export default class Tuner {
     this.analyser = this.audioContext.createAnalyser()
     const self = this
   
-    const frequencyProcessorUrl = new WorkerUrl(new URL('./frequency-processor.ts', import.meta.url));
-
-    this.audioContext.audioWorklet.addModule(frequencyProcessorUrl).then(() => {
+    this.audioContext.audioWorklet.addModule(new URL('./frequency-processor.ts', import.meta.url)).then(() => {
       self.audioWorklet = new AudioWorkletNode(self.audioContext, "frequency-processor");
       this.audioWorklet.port.onmessage = (event) => {
         self.onNoteDetected(event.data);
