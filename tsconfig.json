@@ -1,14 +1,13 @@
 {
     "compilerOptions": {
       "allowJs": true,
-      "target": "es6",
+      "target": "es2020",
       "module": "es2020",
       "moduleResolution": "node",
       "outDir": "dist",
-      "sourceMap": true,
+      "sourceMap": true
     },
     "include": [
-      "app/**/*",
-      "node_modules/aubiojs/**/*"
+      "app/**/*"
     ],
   }

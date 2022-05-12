@@ -1,4 +1,4 @@
-//import aubio from "aubiojs";
+import aubio from "aubiojs";
 import {noteStrings, getStandardFrequency, semitone} from "./tunerCommon";
 
 interface Note {
@@ -9,7 +9,8 @@ interface Note {
     frequency: number;
   }
 
-class FrequencyProcessor extends AudioWorkletProcessor implements AudioWorkletProcessorImpl{
+
+class FrequencyProcessor extends AudioWorkletProcessor {
 
     /*private pitchDetector: InstanceType<Awaited<ReturnType<typeof aubio>>['Pitch']>;*/
 
@@ -80,6 +81,6 @@ class FrequencyProcessor extends AudioWorkletProcessor implements AudioWorkletPr
     }
   }
   
-  registerProcessor('frequency-processor', FrequencyProcessor as any);
+  registerProcessor('frequency-processor', FrequencyProcessor);
 
-
+  aubio();

@@ -10,13 +10,12 @@ const stylesHandler = "style-loader";
 
 const config = {
   entry: {
-    bundle: "./app/app.js",
-    "frequency-processor": "./app/frequency-processor.ts"
+    bundle: "./app/app.js"
   },
   output: {
     filename: "[name].js",
     path: path.resolve(__dirname, "dist"),
-    publicPath: 'auto',
+    publicPath: '/',
   },
   devServer: {
     open: true,
@@ -45,6 +44,13 @@ const config = {
         test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
         type: "asset",
       },
+      {
+        test: /\.js$/,
+        parser: {
+          // For other use the same 
+          worker: ["*.audioWorklet.addModule()", "..."]
+        }
+      }
 
       // Add your rules for custom modules here
       // Learn more about loaders from https://webpack.js.org/loaders/
