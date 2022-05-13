@@ -1,14 +1,16 @@
-import aubio from "aubiojs";
-import {noteStrings, getStandardFrequency, semitone} from "./tunerCommon";
+//import aubio from "aubiojs";
+//import {noteStrings, getStandardFrequency, semitone} from "./tunerCommon";
 
-interface Note {
+/*interface Note {
     name: string;
     value: number;
     cents: number;
     octave: number;
     frequency: number;
-  }
+  }*/
 
+console.log("kokoko");
+//aubio();
 
 class FrequencyProcessor extends AudioWorkletProcessor {
 
@@ -23,7 +25,7 @@ class FrequencyProcessor extends AudioWorkletProcessor {
       // The super constructor call is required.
       super();
 
-      var self = this;
+      //var self = this;
       let bufferSize = 4096;
       let sampleRate = 44100;
 
@@ -36,7 +38,7 @@ class FrequencyProcessor extends AudioWorkletProcessor {
         )
       })*/
     }
-    port: MessagePort;
+    //port: MessagePort;
   
     process(inputs, outputs, parameters) {
       /*const frequency = this.pitchDetector.do(
@@ -62,7 +64,7 @@ class FrequencyProcessor extends AudioWorkletProcessor {
      * @param {number} frequency
      * @returns {number}
      */
-    getNote (frequency: number, middleA: number): number {
+    getNote (frequency, middleA) {
         const note = 12 * (Math.log(frequency / middleA) / Math.log(2))
         return Math.round(note) /*+ semitone*/
     }
@@ -74,7 +76,7 @@ class FrequencyProcessor extends AudioWorkletProcessor {
      * @param {number} note
      * @returns {number}
      */
-    getCents (frequency: number, note: number, middleA): number {
+    getCents (frequency, note, middleA) {
         return Math.floor(
         (1200 * Math.log(frequency /*/ getStandardFrequency(note, middleA)*/)) / Math.log(2)
         )
@@ -83,4 +85,4 @@ class FrequencyProcessor extends AudioWorkletProcessor {
   
   registerProcessor('frequency-processor', FrequencyProcessor);
 
-  aubio();
+  export default FrequencyProcessor;
