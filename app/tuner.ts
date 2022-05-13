@@ -1,4 +1,5 @@
 import { WorkerUrl } from 'worker-url';
+import FrequencyProcessor from './frequency-processor'
 
 interface Note {
   name: string;
@@ -78,7 +79,7 @@ export default class Tuner {
     this.analyser = this.audioContext.createAnalyser()
     const self = this
   
-    this.audioContext.audioWorklet.addModule(new URL('./frequency-processor.ts', import.meta.url)).then(() => {
+    this.audioContext.audioWorklet.addModule(new URL('frequency-processor-worklet.js', import.meta.url)).then(() => {
       self.audioWorklet = new AudioWorkletNode(self.audioContext, "frequency-processor");
       this.audioWorklet.port.onmessage = (event) => {
         self.onNoteDetected(event.data);

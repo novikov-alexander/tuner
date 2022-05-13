@@ -64,22 +64,23 @@ const appConfig = {
     path: path.resolve(__dirname, "dist"),
     publicPath: '/',
   },
-  dependencies: ["frequency-processor"],
+  dependencies: ["frequency-processor-worklet"],
   devServer: {
     open: true,
-    host: "localhost",
+    host: "localhost"
   },
 }
 
 const processorConfig = {
   ...config,
-  name: "frequency-processor",
-  entry: "./app/frequency-processor.ts",
+  name: "frequency-processor-worklet",
+  entry: "./app/frequency-processor.js",
   target: "webworker",
   output: { 
-    filename: "frequency-processor.js",
+    filename: "frequency-processor-worklet.js",
     path: path.resolve(__dirname, "dist"),
-    publicPath: '/'
+    publicPath: '/',
+    globalObject: 'this'
   }
 }
 
