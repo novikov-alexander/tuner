@@ -2,22 +2,15 @@
 
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const WorkerUrlPlugin = require('worker-url/plugin');
 
 const isProduction = process.env.NODE_ENV == "production";
 
 const stylesHandler = "style-loader";
 
-const config = {
-  devtool: "inline-source-map",
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: "app/index.html",
-    }),
-    new WorkerUrlPlugin(),
-    // Add your plugins here
-    // Learn more about plugins from https://webpack.js.org/configuration/plugins/
-  ],
+const partialOptions = {
+  optimization: {
+    minimize: false
+  },
   module: {
     rules: [
       {
@@ -32,13 +25,11 @@ const config = {
         test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
         type: "asset",
       }
-      // Add your rules for custom modules here
-      // Learn more about loaders from https://webpack.js.org/loaders/
     ],
   },
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
-    fallback: { 
+    fallback: {
       "path": require.resolve("path-browserify"),
       "fs": require.resolve("browserify-fs"),
       "buffer": require.resolve("buffer"),
@@ -48,14 +39,7 @@ const config = {
   },
 };
 
-if (isProduction) {
-  config.mode = "production";
-} else {
-  config.mode = "development";
-}
-
-const appConfig = {
-  ...config,
+const config = {
   entry: {
     bundle: "./app/app.js"
   },
@@ -64,27 +48,42 @@ const appConfig = {
     path: path.resolve(__dirname, "dist"),
     publicPath: '/',
   },
-  dependencies: ["frequency-processor-worklet"],
   devServer: {
     open: true,
-    host: "localhost"
+    host: "localhost",
   },
-}
+  devtool: false,
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "app/index.html",
+    }),
+  ],
+  ...partialOptions
+};
 
-const processorConfig = {
-  ...config,
-  name: "frequency-processor-worklet",
-  entry: "./app/frequency-processor.js",
-  target: "webworker",
-  output: { 
-    filename: "frequency-processor-worklet.js",
-    path: path.resolve(__dirname, "dist"),
-    publicPath: '/',
-    globalObject: 'this'
+module.exports = () => {
+  if (isProduction) {
+    config.mode = "production";
+  } else {
+    config.mode = "development";
   }
-}
 
-module.exports = [
-  processorConfig,
-  appConfig
-]
+  return [
+    {
+      name: "webworker",
+      mode: "production",
+      target: "webworker",
+      entry: "./app/frequency-processor.ts",
+      output: {
+        filename: "webworker.min.js",
+        path: path.resolve("./app")
+      },
+      ...partialOptions
+    },
+    {
+      name: "app",
+      dependencies: ["webworker"],
+      ...config
+    }
+  ];
+};

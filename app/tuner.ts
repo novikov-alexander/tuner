@@ -1,5 +1,4 @@
-import { WorkerUrl } from 'worker-url';
-import FrequencyProcessor from './frequency-processor'
+
 
 interface Note {
   name: string;
@@ -22,7 +21,7 @@ export default class Tuner {
   constructor(a4 :number, onNoteDetected:  (note: Note) => void){
     this.middleA = a4 || 440
     this.onNoteDetected = onNoteDetected;
-  
+
     this.initGetUserMedia()
   }
 
@@ -78,17 +77,17 @@ export default class Tuner {
     this.audioContext = new window.AudioContext()
     this.analyser = this.audioContext.createAnalyser()
     const self = this
-  
-    this.audioContext.audioWorklet.addModule(new URL('frequency-processor-worklet.js', import.meta.url)).then(() => {
+
+    this.audioContext.audioWorklet.addModule(new URL('./webworker.min.js', import.meta.url)).then(() => {
       self.audioWorklet = new AudioWorkletNode(self.audioContext, "frequency-processor");
       this.audioWorklet.port.onmessage = (event) => {
         self.onNoteDetected(event.data);
       };
       self.startRecord();
-    }).catch((err) => 
+    }).catch((err) =>
     console.error(err));
   }
-   
+
   /**
    * play the musical note
    *
@@ -102,12 +101,12 @@ export default class Tuner {
     }
     this.oscillator.frequency.value = frequency
   }
-  
+
   stop () {
     this.oscillator.stop()
     this.oscillator = null
   }
-  
+
 }
 
 
